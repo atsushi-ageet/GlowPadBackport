@@ -1,7 +1,7 @@
 GlowPadBackport [ ![Download](https://api.bintray.com/packages/frakbot/maven/GlowPadBackport/images/download.svg) ](https://bintray.com/frakbot/maven/GlowPadBackport/_latestVersion)
 ===============
 
-**A backport of the Android 4.2 GlowPadView that works on the SDK on API levels 4+.**
+**A backport of the Android 4.2 GlowPadView that works on the SDK on API levels 14+.**
 
 It is heavily based upon Google's own internal implementation of the GlowPadView found in Android 4.2 Jelly Bean, but ported to be able to run on the Android SDK up from version 1.6 (API level 4, codename Donut). It uses Reflection in a couple of method calls to access some hidden APIs, so it might break on some Android version, or in the future. I tried limiting the usage of Reflection as much as possible, but those three methods did not have any alternatives.
 

@@ -16,7 +16,7 @@
 
 package net.frakbot.glowpadbackport;
 
-import net.frakbot.glowpadbackport.util.TimeInterpolator;
+import android.animation.TimeInterpolator;
 
 class Ease {
     private static final float DOMAIN = 1.0f;

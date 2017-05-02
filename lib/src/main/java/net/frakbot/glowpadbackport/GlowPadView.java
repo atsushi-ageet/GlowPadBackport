@@ -16,6 +16,10 @@
 
 package net.frakbot.glowpadbackport;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.TimeInterpolator;
+import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.Context;
@@ -37,11 +41,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.accessibility.AccessibilityManager;
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.AnimatorListenerAdapter;
-import com.nineoldandroids.animation.ValueAnimator;
 import net.frakbot.glowpadbackport.util.Const;
-import net.frakbot.glowpadbackport.util.TimeInterpolator;
 
 import java.util.ArrayList;
 
@@ -770,15 +770,8 @@ public class GlowPadView extends View {
     }
 
     @Override
-    @TargetApi(Build.VERSION_CODES.FROYO)
     public boolean onTouchEvent(MotionEvent event) {
-        final int action;
-        if (Const.IS_FROYO) {
-            action = event.getActionMasked();
-        }
-        else {
-            action = event.getAction();
-        }
+        final int action = event.getActionMasked();
 
         boolean handled = false;
         switch (action) {
@@ -825,69 +818,45 @@ public class GlowPadView extends View {
         mPointCloud.glowManager.setY(mOuterRing.getY() + dy);
     }
 
-    @TargetApi(Build.VERSION_CODES.FROYO)
     private void handleDown(MotionEvent event) {
-        int actionIndex = 0;
-        if (Const.IS_FROYO) {
-            actionIndex = event.getActionIndex();
-        }
+        int actionIndex = event.getActionIndex();
         float eventX;
         float eventY;
 
-        if (Const.IS_FROYO) {
-            eventX = event.getX(actionIndex);
-            eventY = event.getY(actionIndex);
-        }
-        else {
-            eventX = event.getX();
-            eventY = event.getY();
-        }
+        eventX = event.getX(actionIndex);
+        eventY = event.getY(actionIndex);
 
         switchToState(STATE_START, eventX, eventY);
         if (!trySwitchToFirstTouchState(eventX, eventY)) {
             mDragging = false;
         }
         else {
-            if (Const.IS_ECLAIR) {
-                mPointerId = event.getPointerId(actionIndex);
-            }
+            mPointerId = event.getPointerId(actionIndex);
 
             updateGlowPosition(eventX, eventY);
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.FROYO)
     private void handleUp(MotionEvent event) {
         if (DEBUG && mDragging) Log.v(TAG, "** Handle RELEASE");
 
-        if (Const.IS_FROYO) {
-            int actionIndex = event.getActionIndex();
+        int actionIndex = event.getActionIndex();
 
-            if (event.getPointerId(actionIndex) == mPointerId) {
-                switchToState(STATE_FINISH, event.getX(actionIndex), event.getY(actionIndex));
-            }
-        }
-        else {
-            switchToState(STATE_FINISH, event.getX(), event.getY());
+        if (event.getPointerId(actionIndex) == mPointerId) {
+            switchToState(STATE_FINISH, event.getX(actionIndex), event.getY(actionIndex));
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.FROYO)
     private void handleCancel(MotionEvent event) {
         if (DEBUG && mDragging) Log.v(TAG, "** Handle CANCEL");
 
         // Drop the active target if canceled.
         mActiveTarget = -1;
 
-        if (Const.IS_FROYO) {
-            int actionIndex = event.getActionIndex();
-            actionIndex = actionIndex == -1 ? 0 : actionIndex;
+        int actionIndex = event.getActionIndex();
+        actionIndex = actionIndex == -1 ? 0 : actionIndex;
 
-            switchToState(STATE_FINISH, event.getX(actionIndex), event.getY(actionIndex));
-        }
-        else {
-            switchToState(STATE_FINISH, event.getX(), event.getY());
-        }
+        switchToState(STATE_FINISH, event.getX(actionIndex), event.getY(actionIndex));
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -901,30 +870,20 @@ public class GlowPadView extends View {
         float activeAngle = 0.0f;
 
         int actionIndex = 0;
-        if (Const.IS_ECLAIR) {
-            actionIndex = event.findPointerIndex(mPointerId);
+        actionIndex = event.findPointerIndex(mPointerId);
 
-            if (actionIndex == -1) {
-                return;  // no data for this pointer
-            }
+        if (actionIndex == -1) {
+            return;  // no data for this pointer
         }
 
         for (int k = 0; k < historySize + 1; k++) {
             float eventX;
             float eventY;
 
-            if (Const.IS_FROYO) {
-                eventX = k < historySize ? event.getHistoricalX(actionIndex, k)
-                                         : event.getX(actionIndex);
-                eventY = k < historySize ? event.getHistoricalY(actionIndex, k)
-                                         : event.getY(actionIndex);
-            }
-            else {
-                eventX = k < historySize ? event.getHistoricalX(k)
-                                         : event.getX();
-                eventY = k < historySize ? event.getHistoricalY(k)
-                                         : event.getY();
-            }
+            eventX = k < historySize ? event.getHistoricalX(actionIndex, k)
+                                     : event.getX(actionIndex);
+            eventY = k < historySize ? event.getHistoricalY(actionIndex, k)
+                                     : event.getY(actionIndex);
 
             // tx and ty are relative to wave center
             float tx = eventX - mWaveCenterX;
@@ -1015,29 +974,26 @@ public class GlowPadView extends View {
         mActiveTarget = activeTarget;
     }
 
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public boolean onHoverEvent(MotionEvent event) {
         AccessibilityManager accessibilityManager =
             (AccessibilityManager) getContext().getSystemService(Context.ACCESSIBILITY_SERVICE);
 
-        if (Const.IS_ICS && accessibilityManager.isTouchExplorationEnabled()) {
-            final int action = event.getAction();
-            switch (action) {
-                case MotionEvent.ACTION_HOVER_ENTER:
-                    event.setAction(MotionEvent.ACTION_DOWN);
-                    break;
-                case MotionEvent.ACTION_HOVER_MOVE:
-                    event.setAction(MotionEvent.ACTION_MOVE);
-                    break;
-                case MotionEvent.ACTION_HOVER_EXIT:
-                    event.setAction(MotionEvent.ACTION_UP);
-                    break;
-            }
-            onTouchEvent(event);
-            event.setAction(action);
-            super.onHoverEvent(event);
+        final int action = event.getAction();
+        switch (action) {
+            case MotionEvent.ACTION_HOVER_ENTER:
+                event.setAction(MotionEvent.ACTION_DOWN);
+                break;
+            case MotionEvent.ACTION_HOVER_MOVE:
+                event.setAction(MotionEvent.ACTION_MOVE);
+                break;
+            case MotionEvent.ACTION_HOVER_EXIT:
+                event.setAction(MotionEvent.ACTION_UP);
+                break;
         }
+        onTouchEvent(event);
+        event.setAction(action);
+        super.onHoverEvent(event);
         return true;
     }
 

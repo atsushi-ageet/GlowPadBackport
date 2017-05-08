@@ -23,21 +23,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), file('proguard-rules.txt')
         }
-
-        publicBeta.initWith(buildTypes.release)
-        publicBeta {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), file('proguard-rules.txt')
-            versionNameSuffix " " + VERSION_BETANUMBER
-        }
-
-        publicDebug.initWith(buildTypes.publicBeta)
-        publicDebug {
-            debuggable true
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), file('proguard-rules.txt')
-            versionNameSuffix " Debug " + VERSION_BETANUMBER
-        }
     }
 }
 

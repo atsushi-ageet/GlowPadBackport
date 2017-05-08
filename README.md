@@ -1,4 +1,4 @@
-GlowPadBackport [ ![Download](https://api.bintray.com/packages/frakbot/maven/GlowPadBackport/images/download.svg) ](https://bintray.com/frakbot/maven/GlowPadBackport/_latestVersion)
+GlowPadBackport [![](https://jitpack.io/v/atsushi-ageet/glowpadbackport.svg)](https://jitpack.io/#atsushi-ageet/glowpadbackport)
 ===============
 
 **A backport of the Android 4.2 GlowPadView that works on the SDK on API levels 14+.**
@@ -31,9 +31,7 @@ In order to use the `GlowPadView` in your project, follow these steps:
 
   ```groovy
   repositories {
-    maven {
-      url "http://dl.bintray.com/frakbot/maven" 
-    }
+      maven { url "https://jitpack.io" }
   }
   ```
   
@@ -44,7 +42,7 @@ In order to use the `GlowPadView` in your project, follow these steps:
   ```groovy
   dependencies {
       // Your other dependencies...
-      compile 'net.frakbot:glowpadbackport:2.1.1'
+      compile 'com.github.atsushi-ageet:glowpadbackport:2.1.1'
   }
   ```
 

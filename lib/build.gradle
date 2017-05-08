@@ -1,5 +1,9 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'com.github.dcendents.android-maven'
+
+archivesBaseName = ARTIFACT_ID
+group = GROUP_ID
+version = VERSION_NAME
 
 android {
     compileSdkVersion 25
@@ -27,14 +31,4 @@ android {
 }
 
 dependencies {
-}
-
-publish {
-    userOrg = POM_DEVELOPER_ID
-    groupId = GROUP_ID
-    artifactId = ARTIFACT_ID
-    publishVersion = VERSION_NAME
-    uploadName = UPLOAD_NAME
-    desc = POM_DESCRIPTION
-    website = POM_URL
 }

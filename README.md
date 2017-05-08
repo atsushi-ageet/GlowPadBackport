@@ -42,7 +42,7 @@ In order to use the `GlowPadView` in your project, follow these steps:
   ```groovy
   dependencies {
       // Your other dependencies...
-      compile 'com.github.atsushi-ageet:glowpadbackport:2.1.1'
+      compile 'com.github.atsushi-ageet:glowpadbackport:2.1.2'
   }
   ```
 
